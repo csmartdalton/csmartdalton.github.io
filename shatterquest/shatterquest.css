@@ -1,0 +1,251 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: verdana;
+	background-color: #000811;
+	color: white;
+}
+a {
+	text-decoration: none;
+	color: white;
+}
+a:hover {
+	text-decoration: underline;
+}
+.layer {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+}
+.layer-contents {
+	display: table-cell;
+	vertical-align: middle;
+}
+.layer-contents-shaded {
+	display: table-cell;
+	vertical-align: middle;
+	background-color: rgba(0, 0, 0, .75);
+}
+.center-horizontally {
+	margin: 0 auto;
+}
+.select-game-container {
+	width: 33.33%;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+.select-game {
+	margin: 20px auto 30px auto;
+	background-color: #3355FF;
+	width: 286px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 13pt;
+	position: relative;
+	border-radius: 11px;
+}
+.select-game:hover {
+	border: 2px solid #6699FF;
+	margin: 18px auto 28px auto;
+}
+.select-game img {
+	width: 286px;
+	height: 470px;
+	border-top-left-radius: 11px;
+	border-top-right-radius: 11px;
+}
+.select-game:hover img {
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+}
+.select-game .fade-image {
+	position: absolute;
+	left: 0;
+	top: 0;
+	visibility: hidden;
+	opacity: 0;
+}
+.button {
+	margin: 2px;
+	background-color: #3355FF;
+	padding: 5px;
+	text-align: center;
+	font-size: 13pt;
+	cursor: pointer;
+	position: relative;
+	display: inline-block;
+	border-radius: 6px;
+}
+.button:hover {
+	margin: 0;
+	border: 2px solid #6699FF;
+	text-decoration: underline;
+}
+.msgbox {
+	padding: 36px;
+	margin: 0 auto;
+	width: 425px;
+	text-align: center;
+	background-color: orange;
+	z-index: 3;
+	color: navy;
+	border-radius: 11px;
+}
+.msgbox .button {
+	min-width: 132px;
+	margin-top: 38px;
+}
+.msgbox .button:hover {
+	min-width: 132px;
+	margin-top: 36px;
+}
+.msgbox table {
+	width: 80%;
+	border: 0;
+	vertical-align: middle;
+	text-align: center;
+	margin: 0 auto;
+}
+.msgbox .msgbox-text {
+	display: table;
+	text-align: left;
+	margin: 0 auto;
+}
+#canvas {
+	position: fixed;
+	border: none;
+}
+#loading {
+	display: table;
+	background-color: inherit;
+}
+#loading-image {
+	width: 320px;
+	height: 480px;
+	border-radius: 25px;
+}
+#loading img {
+	display: block;
+	margin: 0 auto 10px auto;	
+}
+#game {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+#move-instructions-msgbox img {
+	display: block;
+}
+#move-instructions-arrows {
+	margin: 0 auto 32px auto;
+	width: 230px;
+	height: 153px;
+}
+#move-instructions-mouse {
+	margin: 32px auto 32px auto;
+	width: 93px;
+	height: 200px;
+}
+#pick-level-msgbox table {
+	width: auto;
+	margin-top: 38px;
+}
+#pick-level-msgbox td {
+	width: 141px;
+}
+#pick-level-msgbox img {
+	width: 133px;
+	height: 105px;
+	margin: 2px;
+	border-radius: 4px;
+}
+#pick-level-msgbox img:hover {
+	margin: 0px;
+	border: 2px solid #6699FF;
+}
+#level-loader {
+	background-color: rgba(0, 0, 0, .5);
+}
+#progress-contents {
+	margin: 0 auto;
+	position: relative;
+	width: 720px;
+	text-align: center;
+	padding: 50px;
+}
+#progress-title {
+	display: block;
+	margin-bottom: 9px;
+	font-size: 16pt;
+}
+#progress-screenshot-container {
+	display: table;
+	margin: 0 auto;
+	vertical-align: middle;
+	width: 614px;
+	height: 461px;
+}
+#progress-screenshot {
+	display: block;
+	margin: 0 auto;
+	border-top-left-radius: 60px;
+	border-top-right-radius: 60px;
+}
+#progress-border {
+	width: 720px;
+	height: 72px;
+	border: 2px solid #3355FF;
+	border-radius: 11px;
+}
+#progress-bar {
+	height: 100%;
+	width: 0;
+	background-color: orange;
+	border-radius: 7px;
+}
+#save-and-quit {
+	opacity: .5;
+	position: fixed;
+	top: 8px;
+	right: 8px;
+	z-index: 2;
+}
+#resume-game {
+	display: none;
+	position: fixed;
+	top: 8px;
+	right: 8px;
+	z-index: 2;
+}
+#select-games {
+	width: auto;
+	max-width: 1200px;
+	min-width: 940px;
+	margin: 0 auto;
+	overflow: auto;
+	padding: 30px 0 20px 0;
+	background-color: rgba(0, 0, 0, .5);
+	border-top-left-radius: 60px;
+	border-top-right-radius: 60px;
+	border-bottom-left-radius: 30px;
+	border-bottom-right-radius: 30px;
+}
+#shatterquest-title {
+	display: block;
+	margin: 0 auto;
+	width: 583px;
+	height: 82px;
+}
+#shatterquest-author {
+	text-align: center;
+}
+#resources {
+	display: none;
+}

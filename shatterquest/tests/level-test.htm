@@ -1,0 +1,22 @@
+<html><body>
+<textarea rows="50" cols="80" id="log"></textarea>
+</body></html>
+
+<script type='text/javascript' src='download-file.js'></script>
+<script type='text/javascript' src='base64.js'></script>
+<script type='text/javascript' src='data-stream.js'></script>
+<script type='text/javascript' src='knockout/common.js'></script>
+<script type='text/javascript' src='knockout/Vector.js'></script>
+<script type='text/javascript' src='knockout/Blocks.js'></script>
+<script type='text/javascript' src='file-parser.js'></script>
+<script type='text/javascript'>
+	function log(str)
+	{
+		var textbox = document.getElementById('log');
+		textbox.value += str + '\n';
+		textbox.scrollTop = textbox.scrollHeight - textbox.clientHeight;
+	}
+	loadLevel('palace',function() {
+		log('done');
+	});
+</script>

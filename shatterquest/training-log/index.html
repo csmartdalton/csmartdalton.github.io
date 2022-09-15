@@ -1,0 +1,53 @@
+<style>
+    table {
+        *border-collapse: collapse; /* IE7 and lower */
+        border-spacing: 0;
+        width: 100%;
+        font-family: 'trebuchet MS', 'Lucida sans', Arial;
+        color: #444;
+        font-size: 15px;
+    }
+    .box {
+        width: 100%;
+        border: solid #ccc 1px;
+        border-radius: 6px;
+        margin-bottom: 30px;
+    }
+    .box td, .box th {
+        border-left: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;    
+    }
+    .box .title {
+        border-top: none;
+        border-left: none;
+        background-color: #ddd;
+        padding: 7px 10px 7px 10px;
+    }
+    .box .target {
+        border-left: none;
+        background-color: #eee;
+        width: 40%;
+    }
+    .box .comments {
+        border-left: none;
+        height: 150px;
+    }
+    .box .actual {
+        width: 60%;
+    }
+</style>
+
+<table class='box'>
+    <tr><td class='title' colspan='2'>Bench Press</td></tr>
+    <tr><td class='target'>10</td><td class='actual'></td></tr>
+    <tr><td class='target'>8</td><td class='actual'></td></tr>
+    <tr><td class='target'>8</td><td class='actual'></td></tr>
+    <tr><td class='target'>6</td><td class='actual'></td></tr>
+</table>
+
+<table class='box'>
+    <tr><td class='title'>Comments</td></tr>
+    <tr><td class='comments'></td></tr>
+</table>

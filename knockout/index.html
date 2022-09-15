@@ -1,0 +1,434 @@
+<html>
+<head>
+<title>Knock-Out</title>
+<script language = javascript>
+<!--
+	var Barney = new Image(); Barney.src = 'Media/Knock-Out/Barney.GIF'
+	var Ernie = new Image(); Ernie.src = 'Media/Knock-Out/Ernie.GIF'
+	var Dinger = new Image(); Dinger.src = 'Media/Knock-Out/Dinger.GIF'
+	var Nick = new Image(); Nick.src = 'Media/Knock-Out/Nick.GIF'
+	var redBounce = new Image(); redBounce.src = 'Media/Knock-Out/redBounce.JPG'
+	var bluBounce = new Image(); bluBounce.src = 'Media/Knock-Out/bluBounce.JPG'
+	var greBounce = new Image(); greBounce.src = 'Media/Knock-Out/greBounce.JPG'
+	var purBounce = new Image(); purBounce.src = 'Media/Knock-Out/purBounce.JPG'
+	var Invert = new Image(); Invert.src = 'Media/Knock-Out/Invert.GIF'
+	var Spring = new Image(); Spring.src = 'Media/Knock-Out/Spring.GIF'
+	var Ghost = new Image(); Ghost.src = 'Media/Knock-Out/Ghost.GIF'
+	var Alien = new Image(); Alien.src = 'Media/Knock-Out/Alien.GIF'
+	var Bunny = new Image(); Bunny.src = 'Media/Knock-Out/Bunny.GIF'
+	var backColor = new Image(); backColor.src = 'Media/Knock-Out/default.GIF'
+	var whiBall = new Image(); whiBall.src = 'Media/Knock-Out/Ball.GIF'
+	var redBall = new Image(); redBall.src = 'Media/Knock-Out/redBall.GIF'
+	var purBall = new Image(); purBall.src = 'Media/Knock-Out/purBall.GIF'
+	var greBall = new Image(); greBall.src = 'Media/Knock-Out/greBall.GIF'
+	var bluBall = new Image(); bluBall.src = 'Media/Knock-Out/bluBall.GIF'
+
+	var center = parseInt(screen.availWidth / 2)
+	var unit = parseInt(screen.availHeight / 7.9)
+	var ballWidth = parseInt(screen.availHeight / 41)
+	var movement = parseInt(ballWidth / 2)
+	var rightArrow = movement
+	var leftArrow = movement * -1
+	var horizontal = 0
+	var vertical = leftArrow
+	var boardLeft = parseInt(center - (unit * 9 / 2))
+	var boardTop = 30
+	var boardRight = parseInt(boardLeft + unit * 9)
+	var boardBottom = parseInt(boardTop + unit * 7)
+	var ballLeft = parseInt(boardLeft + unit * 9 / 2 - ballWidth / 2)
+	var ballTop = boardBottom - ballWidth
+	var ballColor = 'white'
+	var ballMove = 'no'
+	var level = 1
+	var lives = 15
+	var bounce = 0
+	var bounceTimes = 4
+	var maceMove = movement
+	var maceWidth = parseInt(screen.availHeight / 8.75)
+	var maceLeft = center - parseInt(maceWidth / 2)
+	var mace2Left = center - parseInt(maceWidth / 2)
+	var maceTop  = boardTop + unit * 2
+	var mace2Top = boardTop + unit * 4
+	var doMace = 'no'
+	var iCounter = 0
+	var bCounter = 0
+	var hCounter = 0
+	var started = 'no'
+	var cheatCode = ''
+	var hurt = 'yes'
+	var levelLength = 0
+	var currentLength = 0
+	var colorChange = 'no'
+	var loseLives = -1
+
+	var toWrite = '<div style = "position:absolute; left:' + (screen.availWidth / 2 - 80) + ';top:' + (screen.availHeight / 2 - 10) + ';"><font size = 7 color = "blue">Loading...</font></div>'
+	var borderWidth = parseInt(screen.availHeight / 148)	
+	for(i = 0;i < 9;i++) {
+		for(j = 0;j < 7;j++) {
+			toWrite +=  '<div style = "position:absolute; left:' + (i * unit + boardLeft) + '; top:' + (j * unit + boardTop) + ';">'
+			toWrite +=  '<img src = "Media/Knock-Out/default.GIF" width =' + unit + ' height =' + unit + ' name = img' + (i + 1) + (j + 1) + '></div>'
+		}
+	}
+	toWrite += '<style type = text/css><!--body{font-family: comic sans ms;background-color: beige;color: darkblue;}.infoClass{font-size:' + screen.availHeight / 49.33 + ';}.congratulations{font-size:' + screen.availHeight / 10 + ';color: green;}.youWon{font-size:' + screen.availHeight / 4.5 + ';color: blue;}.cheater{font-size:' + screen.availHeight / 30 + ';color: blue;}//--></style>'
+	toWrite += '<div style = "position:absolute; left:' + maceLeft + '; top:' + (boardTop + unit * 2) + '; visibility:hidden;" id = Mace1><img src = "Media/Knock-Out/Mace.GIF" height =' + maceWidth + '></div>'
+	toWrite += '<div style = "position:absolute; left:' + maceLeft + '; top:' + (boardTop + unit * 4) + '; visibility:hidden;" id = Mace2><img src = "Media/Knock-Out/Mace.GIF" height =' + maceWidth + '></div>'
+	toWrite += '<div style = "position:absolute; left:' + boardLeft + '; top:' + boardTop + '; visibility: hidden;" id = hider><img src = "Media/Knock-Out/default.GIF" width =' + (unit * 9) + ' height =' + (unit * 7) + '></div>'
+	toWrite += '<div style = "position:absolute; left:0; top:' + (boardTop - screen.availHeight / 27.4) + ';"><table width =' + screen.availWidth + ' cellspacing = 0 cellpadding = 0><tr><td width = 50% class = infoClass id = levelCount align = center>Level: 1/10</td><td id = ballCount class = infoClass align = center>Lives Remaining: 15/15</td></tr></table></div>'
+	toWrite += '<div style = "position:absolute; left:0; top:' + (boardBottom + 2) + ';"><table cellpadding = 0 cellspacing = 0 width =' + screen.availWidth + '><tr><td center" class = infoclass id = caption align = center>Press SPACE to begin</td></tr></table></div>'
+	toWrite += '<div style = "position:absolute; left:' + ballLeft + '; top:' + ballTop + ';" id = realball><img name = "imgball" src = "Media/Knock-Out/Ball.GIF" width =' + ballWidth + '></div>'
+	toWrite += '<div style = "position:absolute; left:' + (boardLeft - borderWidth) + '; top:' + (boardTop - borderWidth) + ';"><img src = "Media/Knock-Out/border.GIF" width =' + (unit * 9 + (borderWidth * 2)) + ' height =' + borderWidth + '></div>'
+	toWrite += '<div style = "position:absolute; left:' + (boardLeft - borderWidth) + '; top:' + boardTop + ';"><img src = "Media/Knock-Out/border.GIF" width =' + borderWidth + ' height =' + (unit * 7 + borderWidth) + '></div>'
+	toWrite += '<div style = "position:absolute; left:' + boardLeft + '; top:' + boardBottom + ';"><img src = "Media/Knock-Out/border.GIF" width =' + (unit * 9 + borderWidth) + ' height =' + borderWidth + '></div>'
+	toWrite += '<div style = "position:absolute; left:' + boardRight + '; top:' + boardTop + ';"><img src = "Media/Knock-Out/border.GIF" width =' + borderWidth + ' height =' + (unit * 7) + '></div>'
+	toWrite += '<div style = "position:absolute; left:' + boardLeft + '; top:' + boardTop + '; visibility:hidden;" id = winner>'
+	toWrite += '<table width =' + unit * 9 + ' height =' + unit * 7 + ' cellpadding = 0 cellspacing = 0><tr><td colspan = 3 width = 100% height = 25% class = congratulations><center>CONGRATULATIONS!</td></tr><tr><td colspan = 3 width = 100% height = 50% class = youWon><center>You Won!</td></tr>'
+	toWrite += '<tr height = 25%><td width = 50%><center><input style = "cursor:hand;" type = "button" value = "Play Again" onClick = "winnerDiv.visibility = unseeable; lives = 15; level = 12; end(doMace)"></td><td width = 50%><center><input style = "cursor:hand;" type = "button" value = "Get Cheats" onClick = "cheatsDiv.visibility = seeable; winnerDiv.visibility = unseeable"></td></tr></table></div>'
+	toWrite += '<div style = "position:absolute; left:' + boardLeft + '; top:' + boardTop + '; visibility:hidden;" id = cheats>'
+	toWrite += '<table class = cheater width =' + unit * 9 + ' height =' + unit * 7 + ' cellpadding = 0 cellspacing = 0><tr><td colspan = 2 height = 35% width = 100% valign = "top" class = congratulations><center>CHEATS<br><font class = infoClass color = "white">(All cheats must be entered while the game is paused)</td></tr>'
+	toWrite += '<tr><td align = "left" width = 50%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Warp to levels:</td><td width = 50% align = "right">CXGNTIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>'
+	toWrite += '<tr><td align = "left" width = 50%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Toggle invulnerability on/off:</td><td width = 50% align = "right">LRWJFYX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr><tr><td align = "left" width = 50%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enable/disable color change:</td><td width = 50% align = "right">OZDVWYQ, G/R/B/U in play&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>'
+	toWrite += '<tr><td align = "left" width = 50%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Infinite Lives:</td><td width = 50% align = "right">INVUTYA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>'
+	toWrite += '<tr><td width = 100% height = 15% colspan = 2><center><input style = "cursor:hand;" type = "button" value = "Return" onClick = "winnerDiv.visibility = seeable; cheatsDiv.visibility = unseeable"></td></tr></table></div>'
+	document.writeln(toWrite)
+	toWrite = ''	
+
+	var ball = document.all.realball.style
+	var Mace = document.all.Mace1.style
+	var mace2 = document.all.Mace2.style
+	var hiderDiv = document.all.hider.style
+	var cheatsDiv = document.all.cheats.style
+	var winnerDiv = document.all.winner.style
+	var seeable = 'visible'
+	var unseeable = 'hidden'
+	var left = 'left'
+	var rightPosition = 'top'
+	
+	resizeTo(screen.availWidth + 6,screen.availHeight + 6)
+	moveTo(-3,-3)
+
+	function end(way){
+		horizontal = 0
+		maceLeft = center - parseInt(maceWidth / 2)
+		mace2Left = center - parseInt(maceWidth / 2)
+		doMace = 0
+		Mace.visibility = unseeable
+		mace2.visibility = unseeable
+		started = 'no'
+		rightArrow = movement; leftArrow = movement * -1; iCounter = 0
+		bounceTimes = 4; bCounter = 0
+		hiderDiv.visibility = unseeable; hCounter = 0
+		if(way == 'die') {
+			lives += loseLives
+			changeInside('ballCount','Lives Remaining: ' + lives + '/15') 
+			if(loseLives > 0){changeInside('ballCount','Lives Remaining: ' + lives + '/' + 15)}
+			ball.visibility = unseeable
+			if(lives < 1) {	
+				if(confirm('GAME OVER! would you like to try again?')) {
+					for(i = 0;i < levels[level].length;i++){
+						for(j = 1;j < levels[level][i].length;j++){
+							eval('document.img' + levels[level][i][j] + '.src = backColor.src')
+						}
+					}
+					lives = 15; level = 1
+					changeInside('ballCount','Lives Remaining: 15/15')
+					changeInside('levelCount','Level: ' + level + '/10')
+					makeLevel()
+				}
+			}
+			else {
+				if(lives != 1){alert('YOU JUST DIED! ' + lives + ' balls remaining')}
+				else{alert('YOU JUST DIED! 1 ball remaining')}
+				makeLevel()
+			}
+			if(lives < 1){close()}
+		}
+		else{
+			change = 'yes'
+			iLength = 2
+			if(level > 11){level = 1; change = 'no'}
+			if(level > 3){iLength++}
+			if(level > 6){iLength++}
+			for(i = iLength;i < levels[level].length;i++){
+				eval('document.img' + levels[level][i][1] + '.src = backColor.src')
+			}
+			if(change == 'yes'){level++; change = 'yes'}
+			changeInside('levelCount','Level: ' + level + '/10')
+			makeLevel()
+		}
+	}
+	
+	function makeLevel() {
+		if(level == 1){changeInside('ballCount','Lives Remaining: 15/15')}
+		if(level > levels.length - 1){win()}
+		ballMove = 'no'
+		ballLeft = parseInt(boardLeft + unit * 9 / 2 - ballWidth / 2)
+		ballTop = boardBottom - ballWidth
+		ballColor = 'white'
+		changeInside('caption','Press SPACE to begin')
+		winnerDiv.visibiliy = unseeable
+		document.imgball.src = whiBall.src
+		if(level < 11){ball.visibility = unseeable}
+		currentLevel = new Array()
+		for(i = 0;i < levels[level].length;i++) {
+			currentLevel[i] = new Array()
+			for(j = 0;j < levels[level][i].length;j++) {
+				currentLevel[i][j] = levels[level][i][j]
+			}
+		}
+
+		with(document.all.realball.style) {
+			left = ballLeft
+			top = ballTop
+			visibility = seeable
+		}
+
+		levelLength = 0
+		currentLength = 0
+		for(i = 0;i < levels[level].length;i++) {
+			for(j = 1;j < levels[level][i].length;j++) {
+				eval('document.img' + levels[level][i][j].substring(0,1) + levels[level][i][j].substring(1,2) + '.src =' + levels[level][i][0] + '.src')
+				if((levels[level][i][0] == 'Barney') || (levels[level][i][0] == 'Ernie') || (levels[level][i][0] == 'Dinger') || (levels[level][i][0] == 'Nick')){levelLength++}
+			}
+		}
+
+		if(level > 8){
+			maceLeft = screen.availWidth / 2 - maceWidth / 2; doMace = 1; maceTop = parseInt(boardTop + screen.availHeight / 2 - maceWidth);with(Mace){visibility = seeable; top = maceTop; left = maceLeft}
+			if(level == 10){
+				doMace = 2; maceTop = parseInt(boardTop + screen.availHeight / 3 - maceWidth);Mace.top = maceTop
+				mace2Top = parseInt(boardTop + screen.availHeight * (2 / 3) - maceWidth);with(mace2){visibility = seeable; top = mace2Top; left = mace2Left}
+			}
+		}
+		if(level == 1){alert('Welcome to Knock-Out! Make all the blocks with faces disappear. Be careful in levels to come, there are things to kill you. GOOD LUCK!')}
+		
+	}
+
+	function hitBlock(type,i,j) {
+		if(type.substring(type.length -6,type.length) == 'Bounce'){eval('document.imgball.src =' + type.substring(0,3) + 'Ball.src'); ballColor = type.substring(0,3); document.imgball.width = ballWidth}
+		if(((type == 'Barney') && (ballColor == 'gre')) || ((type == 'Ernie') && (ballColor == 'red')) || ((type == 'Dinger') && (ballColor == 'blu')) || ((type == 'Nick') && (ballColor == 'pur'))){eval('document.img' + currentLevel[i][j] + '.src = backColor.src'); currentLevel[i][j] = '00'; currentLength++}
+		if((type == 'Bunny') || (type == 'Alien')){if(hurt == 'yes'){end('die')}}
+		if((type == 'Invert') && (hurt == 'yes')){rightArrow = movement * -1; leftArrow = movement; iCounter = 1}
+		if((type == 'Ghost') && (hurt == 'yes')){hiderDiv.visibility = seeable; hCounter = 1}
+		if((type == 'Spring') && (hurt == 'yes')){bounceTimes = 18; bCounter = 1}
+	}	
+
+	function moveball(){
+		if(currentLength == levelLength){end('win')}
+		if(iCounter != 0){if(iCounter == 450){rightArrow = movement; leftArrow = movement * -1; iCounter = 0}else{iCounter++}}
+		if(bCounter != 0){if(bCounter == 300){bounceTimes = 4; bCounter = 0}else{bCounter++}}
+		if(hCounter != 0){if(hCounter == 100){hiderDiv.visibility = unseeable; hCounter = 0}else{hCounter++}}
+		if(ballTop == boardTop){vertical = vertical * -1}
+		if(ballTop + ballWidth == boardBottom){vertical = vertical * -1}
+		if(ballLeft + horizontal < boardLeft){ballLeft = boardLeft + movement; bounce = 1}
+		else if(ballLeft + ballWidth + horizontal > boardRight){ballLeft = boardRight - ballWidth - movement; bounce = -1}		
+		else if(bounce > 0){ballLeft += movement; bounce++; if(bounce > bounceTimes){bounce = 0}}
+		else if(bounce < 0){ballLeft += movement * -1; bounce += -1; if(bounce < bounceTimes * -1){bounce = 0}} 
+		else{ballLeft += horizontal}
+		ballTop += vertical
+		if(ballTop < boardTop){ballTop = boardTop}
+		if(ballTop + ballWidth > boardBottom){ballTop = boardBottom - ballWidth}
+		
+		for(i = 0;i < currentLevel.length;i++) {
+			for(j = 1;j < currentLevel[i].length;j++) {
+				blockLeft = unit * currentLevel[i][j].substring(0,1)
+				blockTop = unit * currentLevel[i][j].substring(1,2)
+				if((ballLeft < boardLeft + blockLeft) && (ballTop + ballWidth > boardTop + blockTop - unit) && (ballLeft + ballWidth > boardLeft + blockLeft - unit) && (ballTop < boardTop + blockTop)) {
+					if(ballLeft + ballWidth - movement <= boardLeft + blockLeft - unit){ballLeft = boardLeft + blockLeft - unit - ballWidth; bounce = -1}
+					else if(ballLeft + movement >= boardLeft + blockLeft){ballLeft = boardLeft + blockLeft; bounce = 1}
+					else if(ballTop - ballWidth + movement <= boardTop + blockTop - unit){ballTop = boardTop + blockTop - unit; vertical = vertical * -1; ballTop += vertical * 2}
+					else{ballTop = boardTop + blockTop; vertical = vertical * -1; ballTop += vertical * 2}					
+					hitBlock(currentLevel[i][0],i,j)
+				}
+			}
+		}
+		
+		if(doMace > 0) {
+			if((maceLeft == boardLeft) || (maceLeft == boardRight - maceWidth)){maceMove = maceMove * -1; maceLeft += maceMove}
+			else if(maceLeft < boardLeft){maceLeft = boardLeft}
+			else if(maceLeft > boardRight - maceWidth){maceLeft = boardRight - maceWidth}
+			else{maceLeft += maceMove}
+			Mace.left = maceLeft
+			if((ballLeft < maceLeft + maceWidth) && (ballLeft + ballWidth > maceLeft) && (ballTop < maceTop + maceWidth) && (ballTop + ballWidth > maceTop) && (hurt == 'yes')){end('die')}
+			if(doMace == 2){
+				mace2Left = (center - parseInt(maceWidth / 2)) + (center - parseInt(maceWidth / 2) - maceLeft)
+				mace2.left = mace2Left
+				if((ballLeft < mace2Left + maceWidth) && (ballLeft + ballWidth > mace2Left) && (ballTop < mace2Top + maceWidth) && (ballTop + ballWidth > mace2Top) && (hurt == 'yes')){end('die')}
+			}
+		}
+
+
+		with(document.all.realball.style) {
+			left = ballLeft
+			top = ballTop
+		}
+		
+		if(ballMove == 'yes'){setTimeout('moveball()',25)}
+	}
+	
+	function arrowDown(downKey) {
+		if(downKey == 37){horizontal = leftArrow}
+		if(downKey == 39){horizontal = rightArrow}
+		if(((downKey == 32 || (downKey == 45)) && (started == 'no'))){started = 'yes'; ballMove = 'yes'; moveball(); changeInside('caption','Press P to pause')}
+		if((ballMove == 'no') && (started == 'yes')){
+			if(downKey == 67){cheatCode = '67'}
+			else if(downKey == 76){cheatCode = '76'}
+			else if(downKey == 79){cheatCode = '79'}
+			else if(downKey == 74){cheatCode = '74'}
+			else{cheatCode += downKey}
+			if(cheatCode == '67887178847366'){cheat('warp')}
+			if(cheatCode == '76828774708988'){cheat('invincible')}
+			if(cheatCode == '79906886878981'){cheat('color')}
+			if(cheatCode == '74788685848965'){cheat('lives')}
+			if(downKey == 80){ballMove = 'yes'; changeInside('caption','Press P to pause'); moveball()}
+		}
+		else if(downKey == 80){ballMove = 'no'; changeInside('caption','Game paused, press P to resume')}
+		if((colorChange == 'yes') && (ballMove == 'yes')){if(downKey == 71){ballColor = 'gre'; document.imgball.src = greBall.src}if(downKey == 82){ballColor = 'red'; document.imgball.src = redBall.src}if(downKey == 66){ballColor = 'blu'; document.imgball.src = bluBall.src}if(downKey == 85){ballColor = 'pur'; document.imgball.src = purBall.src}}
+	}
+
+	function arrowUp(upKey) {
+		if(((upKey == 37) && (horizontal == leftArrow)) || ((upKey == 39) && (horizontal == rightArrow))){horizontal = 0}
+	}
+	
+	function cheat(kind){
+		if(kind == 'warp'){
+			winnerDiv.visibility = unseeable
+			cheatsDiv.visibility = unseeable
+			if(level < 10){
+				for(i = 0;i < levels[level].length;i++){
+					for(j = 1;j < levels[level][i].length;j++){
+						eval('document.img' + levels[level][i][j] + '.src = backColor.src')
+					}
+				}
+			}
+			warpTo = (prompt('What level would you like to warp to?','1')) - 1
+			if((warpTo > 0) && (warpTo < 10)){level = warpTo}else{level = 12}
+			end('win')
+		}
+		else if(kind == 'color'){
+			if(colorChange == 'yes'){alert('Color change disabled'); colorChange = 'no'}
+			else{alert('Color change enabled'); colorChange = 'yes'}
+		}
+		else if(kind == 'lives') {
+			if(loseLives == -1){loseLives = 0; changeInside('ballCount','Lives Remaining: A/A'); alert('You now have infinite lives')}
+			else{loseLives = -1; changeInside('ballCount','Lives Remaining: ' + lives + '/15'); alert('You again have ' + lives + ' lives')}
+		}
+		
+		else{if(hurt == 'no'){hurt = 'yes'; alert('You are now vulnerable')}else{hurt = 'no'; alert('You are now invulnerable')}}
+	}
+
+	function win(){
+		winnerDiv.visibility = seeable
+		ball.visibility = unseeable
+	}
+
+	function changeInside(thing,toSay){
+		if(navigator.appName == 'Microsoft Internet Explorer'){eval('document.all.' + thing + '.innerText ="' + toSay + '"')}
+	}
+	
+	var levels = new Array()
+		levels[1] = new Array()
+			levels[1][0] = new Array('Barney','33','43','34','35','36','46','56')
+			levels[1][1] = new Array('Ernie','53','63','73','74','75','76','66')
+			levels[1][2] = new Array('redBounce','81')
+			levels[1][3] = new Array('greBounce','21')
+		levels[2] = new Array()
+			levels[2][0] = new Array('Barney','23','33','43','53','63','64','65','55','45','35','25')
+			levels[2][1] = new Array('Ernie','32','42','52','62','72','73','74','75','76','66','56','46','36')
+			levels[2][2] = new Array('redBounce','84')
+			levels[2][3] = new Array('greBounce','54')
+		levels[3] = new Array()
+			levels[3][0] = new Array('Barney','21','81','53','24','44','64','84','55','77','25','83','27')
+			levels[3][1] = new Array('Ernie','12','91','42','52','34','54','74','56','66','17','97')
+			levels[3][2] = new Array('redBounce','11')
+			levels[3][3] = new Array('greBounce','86')
+		levels[4] = new Array()
+			levels[4][0] = new Array('Barney','63','54','45','65','94','43')
+			levels[4][1] = new Array('Ernie','53','44','64','55','26')
+			levels[4][2] = new Array('Dinger','23','34','52','56','74')
+			levels[4][3] = new Array('Alien','25')
+			levels[4][4] = new Array('redBounce','86')
+			levels[4][5] = new Array('greBounce','81')
+			levels[4][6] = new Array('bluBounce','24')
+		levels[5] = new Array()
+			levels[5][0] = new Array('Barney','12','22','72','33','53','73')
+			levels[5][1] = new Array('Ernie','52','83','34','35','37','43')
+			levels[5][2] = new Array('Dinger','32','62','93','74','75','77')
+			levels[5][3] = new Array('Alien','36')
+			levels[5][4] = new Array('Bunny','76')
+			levels[5][5] = new Array('redBounce','16')
+			levels[5][6] = new Array('greBounce','96')
+			levels[5][7] = new Array('bluBounce','63')
+		levels[6] = new Array()
+			levels[6][0] = new Array('Barney','51','33','65','15','25','45')
+			levels[6][1] = new Array('Ernie','42','24','85','95')
+			levels[6][2] = new Array('Dinger','35','62','75','84')
+			levels[6][3] = new Array('Alien','55')
+			levels[6][4] = new Array('Bunny','73')
+			levels[6][5] = new Array('Spring','92')
+			levels[6][6] = new Array('redBounce','76')
+			levels[6][7] = new Array('greBounce','53')
+			levels[6][8] = new Array('bluBounce','91')
+		levels[7] = new Array()
+			levels[7][0] = new Array('Barney','51','23','25','36','47')
+			levels[7][1] = new Array('Ernie','61','34','72','94')
+			levels[7][2] = new Array('Dinger','41','32','43','74')
+			levels[7][3] = new Array('Nick','14','63','67','76')
+			levels[7][4] = new Array('Alien','83')
+			levels[7][5] = new Array('Bunny','65')
+			levels[7][6] = new Array('Spring','85')
+			levels[7][7] = new Array('Invert','54')
+			levels[7][8] = new Array('redBounce','11')
+			levels[7][9] = new Array('greBounce','97')
+			levels[7][10] = new Array('bluBounce','52')
+			levels[7][11] = new Array('purBounce','45')
+		levels[8] = new Array()
+			levels[8][0] = new Array('Barney','52','53','27','36','45')
+			levels[8][1] = new Array('Ernie','17','24','92','14','64')
+			levels[8][2] = new Array('Dinger','54','63','72','81')
+			levels[8][3] = new Array('Nick','21','32','43','11','97')
+			levels[8][4] = new Array('Alien','75')
+			levels[8][5] = new Array('Bunny','51')
+			levels[8][6] = new Array('Spring','74')
+			levels[8][7] = new Array('Invert','55')
+			levels[8][8] = new Array('Ghost','87')
+			levels[8][9] = new Array('redBounce','71')
+			levels[8][10] = new Array('greBounce','94')
+			levels[8][11] = new Array('bluBounce','91')
+			levels[8][12] = new Array('purBounce','73')
+		levels[9] = new Array()
+			levels[9][0] = new Array('Barney','12','37','93','97','16')
+			levels[9][1] = new Array('Ernie','21','91','34','41','95','55')
+			levels[9][2] = new Array('Dinger','96','13','27','82')
+			levels[9][3] = new Array('Nick','24','31','44','56','87')
+			levels[9][4] = new Array('Alien','47')
+			levels[9][5] = new Array('Bunny','14')
+			levels[9][6] = new Array('Spring','94')
+			levels[9][7] = new Array('Invert','52')
+			levels[9][8] = new Array('Ghost','76')
+			levels[9][9] = new Array('redBounce','11')
+			levels[9][10] = new Array('greBounce','92')
+			levels[9][11] = new Array('bluBounce','32')
+			levels[9][12] = new Array('purBounce','36')
+		levels[10] = new Array()
+			levels[10][0] = new Array('Barney','34','22','13','81','84','87')
+			levels[10][1] = new Array('Ernie','14','16','32','61','85','25')
+			levels[10][2] = new Array('Dinger','42','62','82','83')
+			levels[10][3] = new Array('Nick','23','35','45','55','52')
+			levels[10][4] = new Array('Alien','66')
+			levels[10][5] = new Array('Bunny','65')
+			levels[10][6] = new Array('Spring','86')
+			levels[10][7] = new Array('Invert','94')
+			levels[10][8] = new Array('Ghost','71')
+			levels[10][9] = new Array('redBounce','24')
+			levels[10][10] = new Array('greBounce','36')
+			levels[10][11] = new Array('bluBounce','15')
+			levels[10][12] = new Array('purBounce','93')
+//-->
+</script>
+
+</head>
+
+<body onkeydown = 'arrowDown(event.keyCode)' onKeyup = 'arrowUp(event.keyCode)' onLoad = 'makeLevel()'>
+
+</body>
+
+</html>

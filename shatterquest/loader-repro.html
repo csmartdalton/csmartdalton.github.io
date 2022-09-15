@@ -1,0 +1,24 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  body {
+    background-color: black;
+  }
+  canvas {
+    border-top-left-radius: 60px;
+    border-top-right-radius: 60px;
+    border-bottom-left-radius: 60px;
+    border-bottom-right-radius: 60px;
+  }
+</style>
+
+<canvas id='canvas' width='614' height='460' />
+
+<script>
+  var ctx = document.getElementById('canvas').getContext('2d');
+  var grad = ctx.createLinearGradient(0, 0, 614, 0);
+  grad.addColorStop(0, "#004CB3");
+  grad.addColorStop(1, "#8ED6FF");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 614, 460);
+</script>

@@ -1,0 +1,184 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel='stylesheet' type='text/css' href='shatterquest.css'></link>
+</head>
+
+<body onload='init()'>
+
+<div id='loading' class='layer'><div class='layer-contents'>
+	<img id='loading-image' src='images/default.jpg' />
+	<img src='images/bar.gif' />
+</div></div>
+
+<canvas id='canvas'></canvas>
+
+<div id='game'>
+	<a href='#menu'><div id='save-and-quit'>
+		<span class='button'>SAVE & QUIT</span>
+	</div></a>
+</div>
+
+<div id='level-loader' class='layer'><div class='layer-contents'>
+	<a href='#game'><div id='resume-game'><span class='button'>
+		Resume Current Game
+	</span></div></a>
+	<div id='select-games'>
+		<img id='shatterquest-title' src='images/shatterquest.png' />
+		<a href='javascript:newGame("easy")'><div class='select-game-container'><div class='select-game'>
+			<img id='easy-world-img' />
+			<img id='easy-world-fade' class='fade-image' />
+			<span>World 1 - Easy</span>
+		</div></div></a>
+		<a href='javascript:newGame("hard")'><div class='select-game-container'><div class='select-game'>
+			<img id='hard-world-img' />
+			<img id='hard-world-fade' class='fade-image' />
+			<span>World 2 - Hard</span>
+		</div></div></a>
+		<a href='javascript:newGame("absurd")'><div class='select-game-container'><div class='select-game'>
+			<img id='absurd-world-img' />
+			<img id='absurd-world-fade' class='fade-image' />
+			<span>World 3 - Absurd</span>
+		</div></div></a>
+		<div id='shatterquest-author'>
+			Made by Chris Dalton <br />
+			<a href='maito:chris@shatterquest.com'>chris@shatterquest.com</a>
+		</div>
+	</div>
+</div></div>
+
+<div id='main-menu' class='layer'><div class='layer-contents'>
+	<div id="progress-contents">
+		<span id='progress-title'></span>
+		<div id='progress-screenshot-container'><div class='layer-contents'>
+			<img id='progress-screenshot' src='images/screenshots/pavilion.jpg' />
+		</div></div>
+		<div id='progress-border'>
+			<div id='progress-bar' style='width:72%'></div>
+		</div>
+	</div>
+</div></div>
+
+<div id='move-instructions-msgbox' class='layer'><div class='layer-contents-shaded'><div class='msgbox'>
+	<img id='move-instructions-arrows' src='images/move-instructions-arrows.png' />
+	Use the arrows on your keyboard to move
+	<img id='move-instructions-mouse' src='images/move-instructions-mouse.png' />
+	Click and drag to look around
+	<div class='center-horizontally'><a href='javascript:current_msgbox.onok()'>
+		<span class='button'>OK</span>
+	</a></div>
+</div></div></div>
+
+<div id='next-level-msgbox' class='layer'><div class='layer-contents-shaded'><div class='msgbox'>
+	Great, you beat it. What now?
+	<table><tr>
+		<td><a href='javascript:current_msgbox.oncancel()'>
+			<span class='button'>Main Menu</span>
+		</a></td>
+		<td><a href='javascript:current_msgbox.onok()'>
+			<span class='button'>Next Level</span>
+		</a></td>
+	</tr></table>
+</div></div></div>
+
+<div id='confirm-new-game-msgbox' class='layer'><div class='layer-contents-shaded'><div class='msgbox'>
+	<span class='msgbox-text'>Starting a new game will erase your current one. Are you sure you want to do this?<br />(To resume your current game, click the <i>Resume Current Game</i> button.)</span>
+	<table><tr>
+		<td><a href='javascript:current_msgbox.oncancel()'>
+			<span class='button'>Oh, Never Mind</span>
+		</a></td>
+		<td><a href='javascript:current_msgbox.onok()'>
+			<span class='button'>Yes, Do It</span>
+		</a></td>
+	</tr></table>
+</div></div></div>
+
+<div id='pick-level-msgbox' class='layer'><div class='layer-contents-shaded'><div class='msgbox'>
+	<span class='msgbox-text'>What level do you want to start on?</span>
+	<table><tr id='pick-level-table-row'></tr></table>
+	<div class='center-horizontally'><a href='javascript:current_msgbox.oncancel()'>
+		<span class='button'>Never Mind</span>
+	</a></div>
+</div></div></div>
+
+<div id='simple-msgbox' class='layer'><div class='layer-contents-shaded'><div class='msgbox'>
+	<span id='simple-msgbox-text'></span>
+	<div class='center-horizontally'><a href='javascript:current_msgbox.onok()'>
+		<span class='button'>OK</span>
+	</a></div>
+</div></div></div>
+
+<div id='no-webgl-msgbox' class='layer'><div class='layer-contents-shaded'><div class='msgbox'>
+	<span class='msgbox-text'>WebGL is not available in your browser. (Click <a href='http://doesmybrowsersupportwebgl.com/'>here</a> for a second opinion.)</span>
+	<p />
+	<span class='msgbox-text'>WebGL may be disabled on your computer for security reasons, and updating your OpenGL drivers could fix it. Click <a href='http://www.khronos.org/webgl/wiki/BlacklistsAndWhitelists'>here</a> for more info.</span>
+	<p />
+	<span class='msgbox-text'>Or your browser just might not support WebGL. Click <a href='http://www.khronos.org/webgl/wiki/Getting_a_WebGL_Implementation'>here</a> to find a browser that does.</span>
+</div></div></div>
+
+<div id='resources'>
+	<audio id='song' loop></audio>
+
+	<img id='city-top' src='images/city/PanoramaTop.jpg' />
+	<img id='city-bottom' src='images/city/PanoramaBottom.jpg' />
+	<img id='city-right' src='images/city/PanoramaRight.jpg' />
+	<img id='city-back' src='images/city/PanoramaBack.jpg' />
+
+	<img id='easy-world-1' src='images/screenshots/easy-world-1.jpg' />
+	<img id='easy-world-2' src='images/screenshots/easy-world-2.jpg' />
+	<img id='easy-world-3' src='images/screenshots/easy-world-3.jpg' />
+	<img id='hard-world-1' />
+	<img id='hard-world-2' />
+	<img id='hard-world-3' />
+	<img id='absurd-world-1' />
+	<img id='absurd-world-2' />
+	<img id='absurd-world-3' />
+	<script type='text/javascript'>
+		for (var i = 1; i <= 3; i++) {
+			document.getElementById('hard-world-' + i).src = 'images/screenshots/hard-world' + (localStorage.has_beaten_level_1 ? '-' : '-locked-') + i + '.jpg';
+			document.getElementById('absurd-world-' + i).src = 'images/screenshots/absurd-world' + (localStorage.has_beaten_level_6 ? '-' : '-locked-') + i + '.jpg';	
+		}
+	</script>
+
+	<img id='progress-spinner' src='images/spinner.gif' />
+
+	<img id='white-texture' src='images/white.png' />
+	<img id='ball-texture' src='images/ball.png' />
+	<img id='shadow-texture' src='images/shadow.png' />
+
+	<img id='star-holder-texture' src='images/stars/holder.png' />
+	<img id='star-filler-texture' src='images/stars/filler.png' />
+	<img id='star-border-texture-1' src='images/stars/border-1.png' />
+	<img id='star-border-texture-2' src='images/stars/border-2.png' />
+	<img id='star-border-texture-3' src='images/stars/border-3.png' />
+	<img id='star-border-texture-4' src='images/stars/border-4.png' />
+
+	<img id='words-texture' src='images/words.png' />
+</div>
+
+<script type='text/javascript' src='scripts/base64.js'></script>
+<script type='text/javascript' src='scripts/binary-stream.js'></script>
+<script type='text/javascript' src='scripts/load-texture.js'></script>
+<script type='text/javascript' src='scripts/file-parser.js'></script>
+<script type='text/javascript' src='scripts/sound.js'></script>
+<script type='text/javascript' src='scripts/storage.js'></script>
+<script type='text/javascript' src='scripts/common.js'></script>
+<script type='text/javascript' src='scripts/knockout/Vector.js'></script>
+<script type='text/javascript' src='scripts/knockout/Nova.js'></script>
+<script type='text/javascript' src='scripts/knockout/Blocks.js'></script>
+<script type='text/javascript' src='scripts/knockout/BSP.js'></script>
+<script type='text/javascript' src='scripts/knockout/MovingBlocks.js'></script>
+<script type='text/javascript' src='scripts/knockout/Decorators.js'></script>
+<script type='text/javascript' src='scripts/knockout/Words.js'></script>
+<script type='text/javascript' src='scripts/knockout/Stars.js'></script>
+<script type='text/javascript' src='scripts/knockout/Spikes.js'></script>
+<script type='text/javascript' src='scripts/knockout/Level.js'></script>
+<script type='text/javascript' src='scripts/knockout/Keyboard.js'></script>
+<script type='text/javascript' src='scripts/knockout/Puzzles.js'></script>
+<script type='text/javascript' src='scripts/knockout/Signs.js'></script>
+<script type='text/javascript' src='scripts/knockout/Font.js'></script>
+<script type='text/javascript' src='scripts/knockout/Models.js'></script>
+<script type='text/javascript' src='shatterquest.js'></script>
+
+</body></html>
+

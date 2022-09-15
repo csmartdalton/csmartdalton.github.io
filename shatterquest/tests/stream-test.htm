@@ -1,0 +1,38 @@
+<h1>Progress</h1><br />
+<textarea rows="1" cols="34" id="progress">>                                |</textarea>
+<p />
+<h1>Data</h1><br />
+<textarea rows="50" cols="80" id="log"></textarea>
+
+<script type='text/javascript' src='ajax-stream.js'></script>
+<script type='text/javascript'>
+	var setProgress = function(progress) {
+		var eqs = 32*progress;
+		var i = 0;
+		var text = '';
+		for (; i < eqs; i++)
+			text += '=';
+		text += '>'
+		for (; i < 32; i++)
+			text += ' ';
+		text += '|';
+		document.getElementById('progress').value = text; 
+	};
+	var writeData = function(str) {
+		document.getElementById('log').value += str + '\n';
+	};
+	var stream = ajaxStream('smallfile',setProgress);
+	stream(12,writeData);
+	stream(7,writeData);
+	stream(1,writeData);
+	stream(1,writeData);
+	stream(1,writeData);
+	stream(15,writeData);
+	stream(3,writeData);
+	stream(5,writeData);
+	stream(8,writeData);
+	stream(2,writeData);
+	stream(5,writeData);
+	stream(7,writeData);
+	//stream(100000,writeData);
+</script>

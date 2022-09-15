@@ -1,0 +1,225 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel='stylesheet' type='text/css' href='swankybird.css'></link>
+</head>
+
+<body>
+
+<canvas id='canvas'></canvas>
+
+<span id='progress-label'></span>
+<span id='toast-label'></span>
+
+<div id='main-menu' class='layer'><div class='layer-contents'>
+    <div id='select-games'>
+        <div class='select-game-container'><div class='select-game'>
+            <a href='#levels'>
+                <span class='button'>Levels</span>
+            </a>
+            <span id="levels-subtext" class='button-subtext'></span>
+        </div></div></a>
+        <div class='select-game-container'><div class='select-game'>
+            <a href='#unlimited'>
+                <span class='button'>Unlimited</span>
+            </a>
+            <span id="unlimited-subtext" class='button-subtext'></span>
+        </div></div>
+    </div>
+</div></div>
+
+<div id='levels-menu' class='layer'><div class='layer-contents'>
+    <table id="level-buttons"><tr>
+        <td><a href='#level1'>
+            <span class='button'>1</span>
+        </a></td>
+        <td><a href='#level2'>
+            <span class='button'>2</span>
+        </a></td>
+    </tr><tr>
+        <td><a href='#level3'>
+            <span class='button'>3</span>
+        </a></td>
+        <td><a href='#level4'>
+            <span class='button'>4</span>
+        </a></td>
+    </tr><tr>
+        <td><a href='#level5'>
+            <span class='button'>5</span>
+        </a></td>
+        <td><a href='#level6'>
+            <span class='button'>6</span>
+        </a></td>
+	</tr></table>
+</div></div>
+
+<div id="dead-menu" class="layer"><div class="layer-contents">
+    <div id="dead-menu-content" class="small-menu">
+        <table><tr>
+            <td><span id="dead-menu-score-label" /></td>
+            <td><span id="dead-menu-score-value" /></td>
+        </tr><tr>
+            <td><span id="dead-menu-high-score-label" /></td>
+            <td><span id="dead-menu-high-score-value" /></td>
+	    </tr></table>
+        <a href="javascript:retryLevel()">Try again</a>
+    </div>
+</div></div>
+
+<div id="beaten-menu" class="layer"><div class="layer-contents">
+    <div id="beaten-menu-content" class="small-menu">
+        <span id="beaten-menu-caption"></span>
+        <a id="beaten-menu-link"></a>
+    </div>
+</div></div>
+
+<script src="swankybird.js"></script>
+<script src="platform.js"></script>
+<script>
+canvas = document.getElementById('canvas');
+gl = Browser.createContext(canvas, true, true);
+
+onPlatformInit();
+
+main_menu = document.getElementById('main-menu');
+levels_menu = document.getElementById('levels-menu');
+levels_subtext = document.getElementById('levels-subtext');
+unlimited_subtext = document.getElementById('unlimited-subtext');
+dead_menu = document.getElementById('dead-menu');
+dead_menu_content = document.getElementById('dead-menu-content');
+dead_menu_score_label = document.getElementById('dead-menu-score-label');
+dead_menu_score_value = document.getElementById('dead-menu-score-value');
+dead_menu_high_score_label = document.getElementById('dead-menu-high-score-label');
+dead_menu_high_score_value = document.getElementById('dead-menu-high-score-value');
+beaten_menu = document.getElementById('beaten-menu');
+beaten_menu_content = document.getElementById('beaten-menu-content');
+beaten_menu_caption = document.getElementById('beaten-menu-caption');
+beaten_menu_link = document.getElementById('beaten-menu-link');
+progress_label = document.getElementById('progress-label');
+toast_label = document.getElementById('toast-label');
+
+lookupBeatenLevel = function() { return localStorage.beatenLevel || 0 }
+lookupHighScore = function() { return localStorage.highScore || 0 }
+window.onkeydown = canvas.onmousedown = function(event)
+{
+    onPlatformTap();
+    event.preventDefault();
+    event.stopPropogation();
+    return false;
+}
+is_link = function(target) {
+    while (target) {
+        if (target.hasAttribute('href'))
+            return true;
+        target = target.parentElement;
+    }
+    return false;
+}
+window.ontouchstart = function(event)
+{
+    if (is_link(event.target))
+        return true;
+    onPlatformTap();
+    event.preventDefault();
+    event.stopPropogation();
+    return false;
+}
+window.ontouchend = window.ontouchcancel = window.ontouchmove = canvas.oncontextmenu = function(event)
+{
+    if (is_link(event.target))
+        return true;
+    event.preventDefault();
+    event.stopPropogation();
+    return false;
+}
+
+retryLevel = function()
+{
+    platformKillToast();
+    dead_menu.style.display = 'none';
+    dead_menu_content.style.animationName = '';
+    dead_menu_content.style.WebkitAnimationName = '';
+    canvas.style.cursor = 'pointer';
+    onPlatformRetryLevel()
+}
+
+onhashchange = (function()
+{
+    canvas.style.cursor = 'inherit';
+    dead_menu.style.display = 'none';
+    dead_menu_content.style.animationName = '';
+    dead_menu_content.style.WebkitAnimationName = '';
+    beaten_menu.style.display = 'none';
+    beaten_menu_content.style.animationName = '';
+    beaten_menu_content.style.WebkitAnimationName = '';
+    platformKillToast();
+
+    if (window.location.hash == '#levels') {
+        main_menu.style.display = 'none';
+        levels_menu.style.display = 'table';
+        progress_label.style.display = 'none';
+        onPlatformEnterMenu();
+        return arguments.callee;
+    }
+
+    if (this.match = /^#level([1-6])$/.exec(window.location.hash)
+        || window.location.hash == '#unlimited') {
+        main_menu.style.display = 'none';
+        levels_menu.style.display = 'none';
+        progress_label.style.display = 'inline-block';
+        progress_label.innerHTML = '';
+        onPlatformEnterMenu();
+        onPlatformExitMenu(this.match ? this.match[1] : 0, lookupHighScore());
+        canvas.style.cursor = 'pointer';
+        return arguments.callee;
+    }
+
+    levels_subtext.innerHTML = 'Beaten  ' + lookupBeatenLevel() + ' of 6';
+    unlimited_subtext.innerHTML = 'Best Score  ' + lookupHighScore();
+    main_menu.style.display = 'table';
+    levels_menu.style.display = 'none';
+    progress_label.style.display = 'none';
+    onPlatformEnterMenu();
+    return arguments.callee;
+})();
+
+(function() {
+    var displayHeight = window.innerHeight;
+    var displayWidth = Math.min(window.innerWidth, Math.round(window.innerHeight * 5/4));
+    if (canvas.style.height != displayHeight || canvas.style.width != displayWidth) {
+        canvas.style.width = displayWidth;
+        canvas.style.height = displayHeight;
+    }
+
+    var devicePixelRatio = window.devicePixelRatio || 1;
+    var backingStoreRatio = gl.webkitBackingStorePixelRatio ||
+                            gl.mozBackingStorePixelRatio ||
+                            gl.msBackingStorePixelRatio ||
+                            gl.oBackingStorePixelRatio ||
+                            gl.backingStorePixelRatio || 1;
+    var ratio = devicePixelRatio / backingStoreRatio;
+    var backingWidth = displayWidth * ratio;
+    var backingHeight = displayHeight * ratio;
+    if (canvas.height != backingHeight || canvas.width != backingWidth) {
+        canvas.width = backingWidth;
+        canvas.height = backingHeight;
+        onPlatformSurfaceChanged(canvas.width, canvas.height);
+    }
+
+    try {
+        onPlatformDrawFrame();
+    } catch (err) {
+        if (!err.msg) throw err;
+        if (err.msg === "skybox loader not finished") {
+            err.loader.finishedCallbacks.push(arguments.callee);
+            return;
+        }
+        alert('FATAL: ' + err.msg);
+        abort();
+    }
+
+    requestAnimationFrame(arguments.callee);
+})();
+</script>
+
+</body></html>

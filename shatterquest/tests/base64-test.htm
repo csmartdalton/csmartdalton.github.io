@@ -1,0 +1,10 @@
+<html><body></body></html>
+
+<script type='text/javascript' src='ajax-stream.js'></script>
+<script type='text/javascript' src='base64.js'></script>
+<script type='text/javascript'>
+	var food = base64DecodeStream(ajaxStream('test_png',null));
+	food(1000000000,function(bytes) {
+		document.body.appendChild(rawImage('png', bytes));
+	});
+</script>

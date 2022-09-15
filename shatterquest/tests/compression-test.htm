@@ -1,0 +1,22 @@
+<html><body></body></html>
+
+<script type='text/javascript' src='ajax-stream.js'></script>
+<script type='text/javascript' src='base64.js'></script>
+<script type='text/javascript'>
+	food = ajaxStream('comp',null);
+	food(1000000000,function(str) {
+		//document.write(str);
+	});
+	food = base64DecompressStream(ajaxStream('comp',null));
+	food(1000000000,function(str) {
+		//document.write(str);
+	});
+	var food = base64DecodeStream(base64DecompressStream(ajaxStream('tacoma',null)));
+	food(1000000000,function(bytes) {
+		document.body.appendChild(rawImage('jpg', bytes));
+	});
+	food = base64DecodeStream(base64DecompressStream(ajaxStream('test_png',null)));
+	food(1000000000,function(bytes) {
+		document.body.appendChild(rawImage('png', bytes));
+	});
+</script>

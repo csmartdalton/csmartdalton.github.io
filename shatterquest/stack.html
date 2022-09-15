@@ -1,0 +1,34 @@
+<style>
+body {
+    background-color: black;
+    padding: 0
+    margin: 0
+}
+canvas { 
+    position: absolute;
+}
+</style>
+<canvas id='c' width='512' height='512'></canvas>
+<script>
+    var fillCanvas = function(canvas) {
+        var ctx = canvas.getContext('2d');
+        var grad = ctx.createLinearGradient(0, 512, 512, 0);
+        grad.addColorStop(0, '#4B26B3');
+        grad.addColorStop(1, '#4BDAB3');
+        ctx.fillStyle = grad;
+        ctx.globalAlpha = .1;
+        ctx.fillRect(0, 0, 512, 512);
+    }
+
+    for (var size = 512; size > 0; size -= 20) {
+        var canvas = document.createElement('canvas');
+        canvas.width = 512;
+        canvas.height = 512;
+        canvas.style.left = (10 + (512 - size) / 2) + 'px';
+        canvas.style.top = (10 + (512 - size) / 2) + 'px';
+        canvas.style.width = size + 'px';
+        canvas.style.height = size + 'px';
+        fillCanvas(canvas);
+        document.body.appendChild(canvas);
+    }
+</script>
